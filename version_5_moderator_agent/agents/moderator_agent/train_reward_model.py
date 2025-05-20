@@ -51,7 +51,7 @@ def fetch_feedback_log():
 def make_rlhf_dataset(feedback_log):
     data = []
     for entry in feedback_log:
-        prompt = f"State: {entry['state']}, Feedback: {entry['feedback']}, Negotiation: {entry.get('negotiation')}"
+        prompt = f"State: {entry['utg']}, Feedback: {entry['feedback']}, Negotiation: {entry.get('negotiation')}"
         response = entry.get("response", "...")  # Autonomous Agent의 행동/응답
         reward = entry["reward"]
         data.append({"prompt": prompt, "response": response, "reward": reward})

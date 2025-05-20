@@ -22,12 +22,19 @@ class ModeratorTaskManager(InMemoryTaskManager):
             return meta["utg"]
         return None
 
+    def _get_response(self, request: SendTaskRequest) -> str:
+        meta = getattr(request.params, "metadata", None)
+        if meta and "response" in meta:
+            return meta["response"]
+        return None
+
     async def on_send_task(self, request: SendTaskRequest) -> SendTaskResponse:
         task = await self.upsert_task(request.params)
         query = self._get_user_query(request)
         feedback = self._get_feedback(request)
         utg = self._get_utg(request)
-        result_text = self.agent.invoke(query, request.params.sessionId, feedback, utg)
+        response = self._get_response(request)
+        result_text = self.agent.invoke(query, request.params.sessionId, feedback, utg, response)
         agent_message = Message(role="agent", parts=[TextPart(text=result_text)])
         async with self.lock:
             task.status = TaskStatus(state=TaskState.COMPLETED)

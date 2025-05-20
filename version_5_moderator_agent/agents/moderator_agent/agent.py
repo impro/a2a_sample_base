@@ -7,10 +7,10 @@ class ModeratorAgent:
         self.feedback_log = []
         self.utg_log = []
 
-    def invoke(self, query: str, session_id: str, feedback: dict = None, utg: dict = None) -> str:
-        # 피드백/상태 저장
-        if feedback or utg:
-            self.log_feedback(feedback, utg, session_id)
+    def invoke(self, query: str, session_id: str, feedback: dict = None, utg: dict = None, response: str = None) -> str:
+        # 피드백/상태/response 저장
+        if feedback or utg or response:
+            self.log_feedback(feedback, utg, session_id, response)
         # 자가수정 예시
         if utg and utg.get("transition_reason") == "error":
             return f"Detected abnormal transition from {utg.get('current_state')} to {utg.get('next_state')}. Self-correction triggered."
@@ -18,12 +18,13 @@ class ModeratorAgent:
             return "Self-correction applied based on feedback and UTG."
         return f"Moderator received: {query}"
 
-    def log_feedback(self, feedback, utg, session_id):
+    def log_feedback(self, feedback, utg, session_id, response=None):
         log_entry = {
             "session_id": session_id,
             "feedback": feedback,
             "utg": utg,
             "negotiation": feedback.get("negotiation") if feedback else None,
+            "response": response,  # Autonomous Agent의 행동/응답
             "timestamp": datetime.now().isoformat()
         }
         self.feedback_log.append(log_entry)
