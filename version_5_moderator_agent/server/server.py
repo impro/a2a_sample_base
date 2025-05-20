@@ -18,6 +18,7 @@ class A2AServer:
         self.app = Starlette()
         self.app.add_route("/", self._handle_request, methods=["POST"])
         self.app.add_route("/.well-known/agent.json", self._get_agent_card, methods=["GET"])
+        self.app.add_route("/export_feedback_log", self._export_feedback_log, methods=["GET"])
 
     def start(self):
         if not self.agent_card or not self.task_manager:
@@ -49,3 +50,7 @@ class A2AServer:
             return JSONResponse(content=jsonable_encoder(result.model_dump(exclude_none=True)))
         else:
             raise ValueError("Invalid response type")
+
+    async def _export_feedback_log(self, request: Request):
+        data = self.task_manager.agent.export_for_reward_model()
+        return JSONResponse(data)
