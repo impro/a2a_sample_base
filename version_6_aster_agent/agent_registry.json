@@ -1,0 +1,4 @@
+[
+    {"name": "DomainAgentWeather", "url": "http://localhost:10021/"},
+    {"name": "DomainAgentCity", "url": "http://localhost:10022/"}
+]
