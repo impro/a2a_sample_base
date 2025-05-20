@@ -49,12 +49,10 @@ def fetch_feedback_log():
     return resp.json()
 
 def make_rlhf_dataset(feedback_log):
-    # feedback_log: export_for_reward_model()의 반환값
-    # RLHF 학습에 맞는 포맷으로 변환 (예: prompt, response, reward)
     data = []
     for entry in feedback_log:
-        prompt = f"State: {entry['state']}, Feedback: {entry['feedback']}"
-        response = "..."  # 실제 Autonomous Agent의 행동/응답(로그에 추가 저장 필요)
+        prompt = f"State: {entry['state']}, Feedback: {entry['feedback']}, Negotiation: {entry.get('negotiation')}"
+        response = entry.get("response", "...")  # Autonomous Agent의 행동/응답
         reward = entry["reward"]
         data.append({"prompt": prompt, "response": response, "reward": reward})
     return pd.DataFrame(data)

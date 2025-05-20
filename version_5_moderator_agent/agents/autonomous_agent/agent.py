@@ -1,6 +1,8 @@
 from uuid import uuid4
 
-async def send_task_to_moderator_agent(payload):
+async def send_task_to_moderator_agent(payload, response):
+    # response: Autonomous Agent의 실제 행동 결과
+    payload["metadata"]["response"] = response
     # Implementation of send_task_to_moderator_agent function
     pass
 

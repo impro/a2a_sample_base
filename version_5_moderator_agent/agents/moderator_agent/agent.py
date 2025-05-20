@@ -23,6 +23,7 @@ class ModeratorAgent:
             "session_id": session_id,
             "feedback": feedback,
             "utg": utg,
+            "negotiation": feedback.get("negotiation") if feedback else None,
             "timestamp": datetime.now().isoformat()
         }
         self.feedback_log.append(log_entry)
