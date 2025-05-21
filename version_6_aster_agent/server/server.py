@@ -182,13 +182,16 @@ class A2AServer:
     async def _handle_request(self, request: Request):
         """Handle general requests (delegated to Aster Agent)"""
         try:
-            if "aster" not in self.agents:
-                raise ValueError("Aster Agent not registered")
-            
-            _, task_manager = self.agents["aster"]
+            # Orchestrator(aster_agent)인 경우
+            if "aster" in self.agents:
+                _, task_manager = self.agents["aster"]
+            # 도메인 에이전트(자기 자신만 등록된 경우)
+            elif len(self.agents) == 1:
+                _, task_manager = list(self.agents.values())[0]
+            else:
+                raise ValueError("No suitable agent registered")
             body = await request.json()
             logger.info(f"🔍 Incoming JSON: {json.dumps(body, indent=2)}")
-            
             json_rpc = A2ARequest.validate_python(body)
             if isinstance(json_rpc, SendTaskRequest):
                 result = await task_manager.on_send_task(json_rpc)
