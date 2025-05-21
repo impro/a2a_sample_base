@@ -52,12 +52,8 @@ def main(host: str, port: int, debug: bool):
         )
         weather_agent = WeatherAgent()
         task_manager = WeatherTaskManager(agent=weather_agent)
-        server = A2AServer(
-            host=host,
-            port=port,
-            agent_card=agent_card,
-            task_manager=task_manager
-        )
+        server = A2AServer(host=host, port=port)
+        server.register_agent("weather_agent", agent_card, task_manager)
         logger.info(f"🚀 Starting WeatherAgent server on {host}:{port}")
         server.start()
     except Exception as e:

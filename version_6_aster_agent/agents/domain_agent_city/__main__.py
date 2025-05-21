@@ -96,13 +96,8 @@ def main(host: str, port: int, debug: bool):
         task_manager = CityTaskManager(agent=city_agent)
         
         # Create and start server
-        server = A2AServer(
-            host=host,
-            port=port,
-            agent_card=agent_card,
-            task_manager=task_manager
-        )
-        
+        server = A2AServer(host=host, port=port)
+        server.register_agent("city_agent", agent_card, task_manager)
         logger.info(f"🚀 Starting CityAgent server on {host}:{port}")
         server.start()
         

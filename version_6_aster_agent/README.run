@@ -1,0 +1,16 @@
+1. 도메인 에이전트 전체 수행 방법 (명령어)
+
+아래 3개 터미널을 각각 띄워서 실행하세요.
+1) AsterAgent (Orchestrator)
+Apply to README.run
+Run
+python -m agents.aster_agent --host localhost --port 10020
+2) DomainAgentCity
+Apply to README.run
+Run
+python -m agents.domain_agent_city --host localhost --port 10022
+3) DomainAgentWeather
+Apply to README.run
+Run
+python -m agents.domain_agent_weather --host localhost --port 10023
+각 에이전트는 --debug 옵션을 추가하면 디버그 로그가 더 자세히 출력됩니다.

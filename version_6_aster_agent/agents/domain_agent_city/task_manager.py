@@ -16,8 +16,8 @@ import logging
 from server.task_manager import InMemoryTaskManager
 from models.request import SendTaskRequest, SendTaskResponse
 from models.task import Message, TaskStatus, TaskState, TextPart
-from google.adk.tasks import Task, TaskResult
-from google.adk.messages import MessageService
+#from google.adk.tasks import Task, TaskResult
+#from google.adk.messages import MessageService
 
 logger = logging.getLogger(__name__)
 
@@ -38,7 +38,7 @@ class CityTaskManager(InMemoryTaskManager):
         """
         super().__init__()
         self.agent = agent
-        self._message_service = MessageService()
+        #self._message_service = MessageService()
         
     def _get_user_query(self, request: SendTaskRequest) -> str:
         """

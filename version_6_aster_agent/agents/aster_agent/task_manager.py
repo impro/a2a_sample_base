@@ -16,11 +16,10 @@ class AsterTaskManager(InMemoryTaskManager):
     async def on_send_task(self, request: SendTaskRequest) -> SendTaskResponse:
         task = await self.upsert_task(request.params)
         query = self._get_user_query(request)
-        metadata = self._get_metadata(request)
         session_id = request.params.sessionId
-        # 실제로는 from_user, user_input, metadata 등 전달
-        rendered = self.agent.receive(from_user="user", user_input=query)
-        agent_message = Message(role="agent", parts=[TextPart(text=str(rendered))])
+        # invoke()를 통해 LLM 오케스트레이션 및 agent 연결
+        reply = self.agent.invoke(query, session_id)
+        agent_message = Message(role="agent", parts=[TextPart(text=str(reply))])
         async with self.lock:
             task.status = TaskStatus(state=TaskState.COMPLETED)
             task.history.append(agent_message)
